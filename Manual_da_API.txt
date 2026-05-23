@@ -1,0 +1,24 @@
+Sistema Financeiro
+
+ATENÇÃO: Antes de criar usuário, é necessário ter uma empresa cadastrada!
+Sugestão de script em "src/main/resources/import.sql" com sugestão de empresas para cadastro.
+
+1) Registro e Autenticacao (route: "/auth") Arquivo: controller/AuthController.java
+
+  a) (route: "/auth/register" - POST) Entrada no sistema quando não há cadastro;
+   - Recebe um DTO RegisterRequest com o corpo da request com os dados de JSON de um usuário;
+   - Faz uma pesquisa no banco pela empresa, buscando pelo ID informado ou
+   - Os dados recebidos são repassados a um objeto "Usuário" e salvos no banco;
+   - Todo usuário do banco tem uma empresa que é associado;
+
+  b) (route/método: "/auth/login" - POST) Entrada no sistema quando é cadastrado;
+   - Recebe um DTO LoginRequest com o corpo da request com os dados de JSON de um usuário;
+   - Faz uma pesquisa pelo email do usuário para ver se existe o usuário;
+   - Se ok, confere a senha do usuário;
+   - Se ok, cria um token com o JwtService usando o Id do usuário e o Id da empresa dele;
+   - O token deve ser anotado para sempre ser enviado em todas as requests seguintes para identificar o usuário e empresa;
+
+2) Lancamentos (route: ("/lancamentos") Arquivo: controller/LancamentoController.java
+
+  a) (route: "/lancamentos" - GET) Busca pelos lançamentos de uma empresa
+   Deve colocar o token gerado em todas requests;
