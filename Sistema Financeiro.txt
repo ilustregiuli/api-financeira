@@ -1,0 +1,36 @@
+Sistema Financeiro
+
+1) Registro e Autenticacao (route: "/auth") Arquivo: controller/AuthController.java 
+
+Se for o primeiro usuário a entrar no sistema, ele não terá uma empresa cadastrada. Esse primeiro cadastro é
+feito colocando na request o "id" da empresa;
+  a) (route: "/auth/register" - POST) Entrada no sistema quando não há cadastro;
+   - Recebe um DTO RegisterRequest com o corpo da request com os dados de JSON de um usuário, esse primeiro cadastro
+   deve ter a empresa cadastrada;
+   - Faz uma pesquisa no banco pela empresa, buscando pelo ID informado;
+   - Os dados recebidos são repassados a um objeto "Usuário" e salvos no banco;
+   - Tohdo usuário do banco tem uma empresa que é associado;
+
+  b) (route/métohdo: "/auth/login" - POST) Entrada no sistema quando é cadastrado;
+   - Recebe um DTO LoginRequest com o corpo da request com os dados de JSON de um usuário;
+   - Faz uma pesquisa pelo email do usuário para ver se existe o usuário;
+   - Se ok, confere a senha do usuário;
+   - Se ok, cria um token com o JwtService usando o Id do usuário e o Id da empresa dele;
+   - O token deve ser anotado para sempre ser enviado em todas as requests seguintes para identificar o usuário e empresa;
+
+2) Lancamentos (route: ("/lancamentos") ) Arquivo: controller/LancamentoController.java
+
+  a) (route: "/lancamentos" - GET) Busca pelos lançamentos de uma empresa.
+   - Deve colocar o token gerado em todas requests;
+   - O retorno da busca é uma classe ApiResponse, que foi feita para receber a resposta (como um DTO?)
+
+3) Usuários (route: ("/usuários") ) Arquivo: controller/UsuarioController.java
+
+   a) (route: ("/usuários") - GET) Busca por todos os usuários de uma empresa.
+   Deve colocar o token gerado em todas requests - a diferenciação do grupo de usuários é feita pelo token.
+   O contexto do usuário (usuário que fez login), fornece o Id da empresa a que está atrelado.
+   Com esse Id, é feito a consulta por todos os usuários do banco que tenham aquela empresaId no seu cadastro.	
+
+   b) (route: ("/usuários") - POST) Cadastra um usuário no sistema para uma empresa.
+   O usuário que está cadastrando o outro, já foi logado (vai colocar o seu token na request) e pegando o contexto desse
+   usuário, vai ser usado o empresaId dele para pesquisar a empresa no banco e adicionar ela como a empresa do novo usuário.

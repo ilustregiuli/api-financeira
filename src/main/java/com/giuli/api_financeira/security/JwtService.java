@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
+import java.time.Duration;
 
 import java.security.Key;
 import java.util.Date;
@@ -23,7 +24,8 @@ public class JwtService {
                 .setSubject(userId.toString())
                 .claim("empresaId", empresaId)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .setExpiration(new Date(System.currentTimeMillis() +
+                        Duration.ofHours(1).toMillis()))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
